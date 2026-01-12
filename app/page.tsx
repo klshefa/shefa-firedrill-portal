@@ -209,6 +209,43 @@ export default function FireDrillPage() {
         </div>
       </header>
 
+      {/* Overall Progress Bar */}
+      <div className="bg-gray-900/80 border-b border-white/10 px-4 py-3">
+        <div className="max-w-screen-xl mx-auto">
+          {/* Progress Bar */}
+          <div className="relative h-8 bg-white/10 rounded-full overflow-hidden mb-2">
+            <div 
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500 to-emerald-500 transition-all duration-500"
+              style={{ width: `${stats.overallPercent}%` }}
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-white font-bold text-sm drop-shadow-lg">
+                {stats.overallPercent}% Accounted For
+              </span>
+            </div>
+          </div>
+          {/* Stats Row */}
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center gap-4">
+              <span className="text-green-400">
+                ✓ {stats.staffCheckedIn + stats.studentsCheckedIn} checked in
+              </span>
+              <span className="text-red-400">
+                ✗ {stats.staffOut + stats.studentsOut} out
+              </span>
+              {(stats.staffVcAbsent + stats.studentsVcAbsent) > 0 && (
+                <span className="text-yellow-400">
+                  ⚠ {stats.staffVcAbsent + stats.studentsVcAbsent} VC absent
+                </span>
+              )}
+            </div>
+            <span className="text-white/60">
+              {stats.staffCheckedIn + stats.studentsCheckedIn + stats.staffOut + stats.studentsOut} / {stats.totalStaff + stats.totalStudents} total
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Mobile Search */}
       <div className="md:hidden px-4 py-2 bg-gray-900/50">
         <input
