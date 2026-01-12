@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     
     const supabase = createServerClient(
       'https://rkfwphowryckqkozscfi.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrZndwaG93cnlja3Frb3pzY2ZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY4MDY0NzUsImV4cCI6MjA1MjM4MjQ3NX0.YdECFZGxvO5k5SfWHRBkqgLM-9pXAFBN8C8K9ETvLcA',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrZndwaG93cnlja3Frb3pzY2ZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0Mzg2MTEsImV4cCI6MjA3MzAxNDYxMX0.BRxY8LGo1iVhO-9j6eVc_vQ4UcXWa8uweOsY_DDuhq4',
       {
         cookies: {
           getAll() {
