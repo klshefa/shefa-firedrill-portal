@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { RealtimeChannel } from '@supabase/supabase-js'
 
@@ -35,7 +35,8 @@ export function useFireDrill() {
   const [people, setPeople] = useState<Person[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const supabase = createClient()
+  const supabase = useRef(createClient()).current // Stable reference
+  const channelRef = useRef<RealtimeChannel | null>(null)
 
   // Fetch all people (staff + students) with their check-in status
   const fetchPeople = useCallback(async () => {
@@ -259,22 +260,25 @@ export function useFireDrill() {
     return Array.from(classes).sort()
   }, [people])
 
-  // Subscribe to realtime updates
+  // Subscribe to realtime updates - CRITICAL for safety!
   useEffect(() => {
     fetchPeople()
 
-    // Set up realtime subscription for instant sync across devices
+    // Set up realtime subscription for instant sync across ALL devices
+    const channelName = `firedrill-realtime-${Math.random().toString(36).substring(7)}`
+    console.log('🔌 Setting up realtime subscription:', channelName)
+    
     const channel = supabase
-      .channel('firedrill-realtime')
+      .channel(channelName)
       .on(
         'postgres_changes',
         { 
           event: '*', 
           schema: 'public', 
-          table: 'firedrill_status' 
+          table: 'firedrill_status'
         },
         (payload) => {
-          console.log('Realtime update received:', payload)
+          console.log('🔥 FIREDRILL REALTIME UPDATE RECEIVED:', payload)
           
           if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
             const newRecord = payload.new as {
@@ -286,20 +290,39 @@ export function useFireDrill() {
               checked_in_by: string | null
             }
             
+            console.log('📝 Updating person:', newRecord.person_id, newRecord.person_type, {
+              checked_in: newRecord.checked_in,
+              out_today: newRecord.out_today
+            })
+            
             // Update local state directly for instant feedback
-            setPeople(prev => prev.map(p => 
-              p.person_id === newRecord.person_id && p.person_type === newRecord.person_type
-                ? { 
-                    ...p, 
-                    checked_in: newRecord.checked_in, 
-                    out_today: newRecord.out_today,
-                    checked_in_at: newRecord.checked_in_at,
-                    checked_in_by: newRecord.checked_in_by,
-                  }
-                : p
-            ))
+            setPeople(prev => {
+              const found = prev.find(p => 
+                p.person_id === newRecord.person_id && p.person_type === newRecord.person_type
+              )
+              
+              if (!found) {
+                console.warn('⚠️ Person not found in local state:', newRecord.person_id, newRecord.person_type)
+                // If person not found, refetch to be safe
+                setTimeout(() => fetchPeople(), 100)
+                return prev
+              }
+              
+              const updated = prev.map(p => 
+                p.person_id === newRecord.person_id && p.person_type === newRecord.person_type
+                  ? { 
+                      ...p, 
+                      checked_in: newRecord.checked_in, 
+                      out_today: newRecord.out_today,
+                      checked_in_at: newRecord.checked_in_at,
+                      checked_in_by: newRecord.checked_in_by,
+                    }
+                  : p
+              )
+              console.log('✅ State updated successfully')
+              return updated
+            })
           } else if (payload.eventType === 'DELETE') {
-            // On delete, reset the person's status
             const oldRecord = payload.old as { person_id: number; person_type: string }
             setPeople(prev => prev.map(p => 
               p.person_id === oldRecord.person_id && p.person_type === oldRecord.person_type
@@ -309,15 +332,31 @@ export function useFireDrill() {
           }
         }
       )
-      .subscribe((status) => {
-        console.log('Realtime subscription status:', status)
+      .subscribe((status, err) => {
+        if (err) {
+          console.error('❌ REALTIME SUBSCRIPTION ERROR:', err)
+          setError(`Realtime connection failed: ${err.message}`)
+        } else {
+          console.log('✅ REALTIME SUBSCRIBED - Status:', status)
+        }
       })
 
+    channelRef.current = channel
+
+    // Safety fallback: Poll every 5 seconds as backup (for critical safety)
+    const pollInterval = setInterval(() => {
+      fetchPeople()
+    }, 5000) // Poll every 5 seconds as backup
+
     return () => {
-      console.log('Cleaning up realtime subscription')
-      supabase.removeChannel(channel)
+      console.log('🧹 Cleaning up realtime subscription and polling')
+      clearInterval(pollInterval)
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current)
+        channelRef.current = null
+      }
     }
-  }, []) // Empty deps - only run once on mount
+  }, [fetchPeople]) // Include fetchPeople since we call it
 
   return {
     people,
