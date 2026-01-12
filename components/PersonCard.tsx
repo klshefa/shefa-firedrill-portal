@@ -17,18 +17,24 @@ export function PersonCard({ person, onCheckIn, onOutToday }: PersonCardProps) {
     if (person.checked_in) {
       return 'bg-green-500/20 border-green-500/50 hover:bg-green-500/30'
     }
+    // Yellow highlight for VC absent (marked absent in Veracross)
+    if (person.vc_absent) {
+      return 'bg-yellow-500/20 border-yellow-500/50 hover:bg-yellow-500/30'
+    }
     return 'bg-white/5 border-white/10 hover:bg-white/10'
   }
 
   const getStatusIcon = () => {
     if (person.out_today) return '✗'
     if (person.checked_in) return '✓'
+    if (person.vc_absent) return '⚠'
     return '○'
   }
 
   const getStatusColor = () => {
     if (person.out_today) return 'text-red-400'
     if (person.checked_in) return 'text-green-400'
+    if (person.vc_absent) return 'text-yellow-400'
     return 'text-white/40'
   }
 
@@ -53,9 +59,16 @@ export function PersonCard({ person, onCheckIn, onOutToday }: PersonCardProps) {
           
           {/* Name and Class */}
           <div className="flex-1 min-w-0">
-            <p className="font-medium text-white truncate">
-              {person.last_name}, {person.first_name}
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="font-medium text-white truncate">
+                {person.last_name}, {person.first_name}
+              </p>
+              {person.vc_absent && !person.checked_in && !person.out_today && (
+                <span className="text-[10px] px-1.5 py-0.5 bg-yellow-500/30 text-yellow-300 rounded font-medium">
+                  VC Absent
+                </span>
+              )}
+            </div>
             <p className="text-xs text-white/50 truncate">
               {person.class_name || 'No class'}
               {person.grade_level !== undefined && person.grade_level !== null && ` • Grade ${person.grade_level}`}

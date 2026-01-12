@@ -286,6 +286,11 @@ export default function FireDrillPage() {
                       <span className="text-xs px-2 py-1 bg-red-500/20 text-red-400 rounded-full">
                         ✗ {stats.staffOut}
                       </span>
+                      {stats.staffVcAbsent > 0 && (
+                        <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full">
+                          ⚠ {stats.staffVcAbsent}
+                        </span>
+                      )}
                     </div>
                   </div>
                   {/* Placeholder to match Students header height */}
@@ -329,6 +334,11 @@ export default function FireDrillPage() {
                       <span className="text-xs px-2 py-1 bg-red-500/20 text-red-400 rounded-full">
                         ✗ {stats.studentsOut}
                       </span>
+                      {stats.studentsVcAbsent > 0 && (
+                        <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full">
+                          ⚠ {stats.studentsVcAbsent}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <select
