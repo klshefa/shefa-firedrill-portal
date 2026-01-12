@@ -263,29 +263,61 @@ export function useFireDrill() {
   useEffect(() => {
     fetchPeople()
 
-    let channel: RealtimeChannel | null = null
-    
-    const setupRealtime = async () => {
-      channel = supabase
-        .channel('firedrill-changes')
-        .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'firedrill_status' },
-          () => {
-            fetchPeople()
+    // Set up realtime subscription for instant sync across devices
+    const channel = supabase
+      .channel('firedrill-realtime')
+      .on(
+        'postgres_changes',
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'firedrill_status' 
+        },
+        (payload) => {
+          console.log('Realtime update received:', payload)
+          
+          if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+            const newRecord = payload.new as {
+              person_id: number
+              person_type: 'staff' | 'student'
+              checked_in: boolean
+              out_today: boolean
+              checked_in_at: string | null
+              checked_in_by: string | null
+            }
+            
+            // Update local state directly for instant feedback
+            setPeople(prev => prev.map(p => 
+              p.person_id === newRecord.person_id && p.person_type === newRecord.person_type
+                ? { 
+                    ...p, 
+                    checked_in: newRecord.checked_in, 
+                    out_today: newRecord.out_today,
+                    checked_in_at: newRecord.checked_in_at,
+                    checked_in_by: newRecord.checked_in_by,
+                  }
+                : p
+            ))
+          } else if (payload.eventType === 'DELETE') {
+            // On delete, reset the person's status
+            const oldRecord = payload.old as { person_id: number; person_type: string }
+            setPeople(prev => prev.map(p => 
+              p.person_id === oldRecord.person_id && p.person_type === oldRecord.person_type
+                ? { ...p, checked_in: false, out_today: false, checked_in_at: null, checked_in_by: null }
+                : p
+            ))
           }
-        )
-        .subscribe()
-    }
-
-    setupRealtime()
+        }
+      )
+      .subscribe((status) => {
+        console.log('Realtime subscription status:', status)
+      })
 
     return () => {
-      if (channel) {
-        supabase.removeChannel(channel)
-      }
+      console.log('Cleaning up realtime subscription')
+      supabase.removeChannel(channel)
     }
-  }, [fetchPeople, supabase])
+  }, []) // Empty deps - only run once on mount
 
   return {
     people,
