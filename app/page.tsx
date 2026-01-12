@@ -19,7 +19,8 @@ export default function FireDrillPage() {
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [resetting, setResetting] = useState(false)
 
-  const supabase = createClient()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const supabase = useMemo(() => createClient(), [])
   const { people, loading, error, toggleCheckIn, toggleOutToday, resetAll, getStats, getClasses, refresh } = useFireDrill()
   const { isAdmin, loading: adminLoading } = useAdmin(user?.email)
 
@@ -55,15 +56,26 @@ export default function FireDrillPage() {
 
   // Sign in with Google
   const signIn = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-        queryParams: {
-          hd: 'shefaschool.org',
+    try {
+      console.log('Starting sign in...')
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            hd: 'shefaschool.org',
+          },
         },
-      },
-    })
+      })
+      console.log('Sign in result:', { data, error })
+      if (error) {
+        console.error('Sign in error:', error)
+        alert(`Sign in error: ${error.message}`)
+      }
+    } catch (err) {
+      console.error('Sign in exception:', err)
+      alert(`Sign in exception: ${err}`)
+    }
   }
 
   // Sign out
