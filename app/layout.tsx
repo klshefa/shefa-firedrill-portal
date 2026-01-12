@@ -8,7 +8,12 @@ export const metadata: Metadata = {
   title: 'Fire Drill Check-In | Shefa School',
   description: 'Emergency fire drill attendance check-in system',
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon.png', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/favicon.png',
   },
 }
 
