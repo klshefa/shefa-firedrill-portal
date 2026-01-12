@@ -69,7 +69,7 @@ export function useFireDrill() {
       const today = new Date().toISOString().split('T')[0]
       const { data: attendanceData } = await supabase
         .from('master_attendance')
-        .select('person_id, today_abs, student_attendance_status')
+        .select('person_id, attendance_category')
         .eq('attendance_date', today)
 
       // Create a map of statuses
@@ -77,10 +77,10 @@ export function useFireDrill() {
         statusData?.map(s => [`${s.person_type}-${s.person_id}`, s]) || []
       )
 
-      // Create a map of VC absences (status != 0 or today_abs = true means absent)
+      // Create a map of VC absences (attendance_category = 1 means absent)
       const absentMap = new Set(
         (attendanceData || [])
-          .filter(a => a.today_abs === true || (a.student_attendance_status && a.student_attendance_status !== 0))
+          .filter(a => a.attendance_category === 1)
           .map(a => a.person_id)
       )
 
