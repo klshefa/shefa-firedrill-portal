@@ -272,7 +272,7 @@ export default function FireDrillPage() {
               {/* Staff Panel */}
               <div className="w-1/2 border-r border-white/10 flex flex-col">
                 <div className="p-4 border-b border-white/10 bg-white/5">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between mb-2">
                     <h2 className="text-lg font-semibold text-white">
                       Staff
                       <span className="ml-2 text-sm text-white/50">
@@ -288,6 +288,8 @@ export default function FireDrillPage() {
                       </span>
                     </div>
                   </div>
+                  {/* Placeholder to match Students header height */}
+                  <div className="h-[38px]"></div>
                 </div>
                 <div className="flex-1 overflow-y-auto p-4 space-y-2">
                   <AnimatePresence mode="popLayout">
@@ -344,11 +346,15 @@ export default function FireDrillPage() {
                   <AnimatePresence mode="popLayout">
                     {studentPeople
                       .filter(p => {
+                        // If searching, ignore class filter for safety (global search)
+                        if (searchQuery) {
+                          const query = searchQuery.toLowerCase()
+                          return `${p.first_name} ${p.last_name}`.toLowerCase().includes(query) ||
+                                 `${p.last_name} ${p.first_name}`.toLowerCase().includes(query)
+                        }
+                        // Not searching - apply class filter
                         if (selectedClass !== 'all' && p.class_name !== selectedClass) return false
-                        if (!searchQuery) return true
-                        const query = searchQuery.toLowerCase()
-                        return `${p.first_name} ${p.last_name}`.toLowerCase().includes(query) ||
-                               `${p.last_name} ${p.first_name}`.toLowerCase().includes(query)
+                        return true
                       })
                       .map(person => (
                         <PersonCard
