@@ -62,7 +62,7 @@ export function useFireDrill() {
       // Fetch all check-in statuses
       const { data: statusData, error: statusError } = await supabase
         .from('firedrill_status')
-        .select('*')
+        .select('id, person_id, person_type, checked_in, out_today, checked_in_at, checked_in_by')
 
       if (statusError) throw statusError
 
