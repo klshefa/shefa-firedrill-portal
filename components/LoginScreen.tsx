@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 interface LoginScreenProps {
   icon?: string  // Emoji (for Sharks only)
-  IconComponent?: React.ComponentType<{ className?: string; strokeWidth?: number }>  // Heroicon component
+  IconComponent?: React.ComponentType<{ className?: string; strokeWidth?: string | number }>  // Heroicon component
   title: string
   subtitle?: string
   onSignIn: () => void
