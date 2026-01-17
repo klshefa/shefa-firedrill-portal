@@ -190,7 +190,7 @@ export default function FireDrillPage() {
                 <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                   {user.email.charAt(0).toUpperCase()}
                 </div>
-                <LogoutButton onSignOut={signOut} />
+                <LogoutButton onSignOut={signOut} className="text-white/70 hover:text-white hover:bg-white/10" />
               </div>
             </div>
           </div>
