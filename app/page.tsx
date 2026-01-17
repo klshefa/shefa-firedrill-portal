@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { createClient } from '@/lib/supabase/client'
 import { useFireDrill, Person } from '@/lib/hooks/useFireDrill'
 import { useAdmin } from '@/lib/hooks/useAdmin'
+import { useToast } from '@/components/ui/ToastProvider'
 import { PersonCard } from '@/components/PersonCard'
 import { ProgressBar } from '@/components/ProgressBar'
 import { LoginScreen } from '@/components/LoginScreen'
@@ -26,6 +27,7 @@ export default function FireDrillPage() {
   const supabase = createClient()
   const { people, loading, error, toggleCheckIn, toggleOutToday, resetAll, getStats, getClasses, refresh } = useFireDrill()
   const { isAdmin, loading: adminLoading } = useAdmin(user?.email)
+  const { toast } = useToast()
 
   // Auth check
   useEffect(() => {
@@ -108,9 +110,14 @@ export default function FireDrillPage() {
   const handleReset = async () => {
     if (!user?.email) return
     setResetting(true)
-    await resetAll(user.email)
+    const success = await resetAll(user.email)
     setResetting(false)
     setShowResetConfirm(false)
+    if (success) {
+      toast.success('All check-ins reset successfully')
+    } else {
+      toast.error('Failed to reset check-ins. Please try again.')
+    }
   }
 
   // Staff and student counts for tabs
@@ -360,8 +367,24 @@ export default function FireDrillPage() {
                         <PersonCard
                           key={`staff-${person.person_id}`}
                           person={person}
-                          onCheckIn={() => toggleCheckIn(person, user.email)}
-                          onOutToday={() => toggleOutToday(person)}
+                          onCheckIn={async () => {
+                            const wasCheckedIn = person.checked_in
+                            const result = await toggleCheckIn(person, user.email)
+                            if (result.success) {
+                              toast.success(`${person.full_name} ${wasCheckedIn ? 'checked out' : 'checked in'} successfully`)
+                            } else {
+                              toast.error(`Failed to ${wasCheckedIn ? 'check out' : 'check in'} ${person.full_name}`)
+                            }
+                          }}
+                          onOutToday={async () => {
+                            const wasOutToday = person.out_today
+                            const result = await toggleOutToday(person)
+                            if (result.success) {
+                              toast.success(`${person.full_name} marked as ${wasOutToday ? 'present' : 'out today'}`)
+                            } else {
+                              toast.error(`Failed to update status for ${person.full_name}`)
+                            }
+                          }}
                         />
                       ))}
                   </AnimatePresence>
@@ -422,8 +445,24 @@ export default function FireDrillPage() {
                         <PersonCard
                           key={`student-${person.person_id}`}
                           person={person}
-                          onCheckIn={() => toggleCheckIn(person, user.email)}
-                          onOutToday={() => toggleOutToday(person)}
+                          onCheckIn={async () => {
+                            const wasCheckedIn = person.checked_in
+                            const result = await toggleCheckIn(person, user.email)
+                            if (result.success) {
+                              toast.success(`${person.full_name} ${wasCheckedIn ? 'checked out' : 'checked in'} successfully`)
+                            } else {
+                              toast.error(`Failed to ${wasCheckedIn ? 'check out' : 'check in'} ${person.full_name}`)
+                            }
+                          }}
+                          onOutToday={async () => {
+                            const wasOutToday = person.out_today
+                            const result = await toggleOutToday(person)
+                            if (result.success) {
+                              toast.success(`${person.full_name} marked as ${wasOutToday ? 'present' : 'out today'}`)
+                            } else {
+                              toast.error(`Failed to update status for ${person.full_name}`)
+                            }
+                          }}
                         />
                       ))}
                   </AnimatePresence>
@@ -455,8 +494,22 @@ export default function FireDrillPage() {
                     <PersonCard
                       key={`${person.person_type}-${person.person_id}`}
                       person={person}
-                      onCheckIn={() => toggleCheckIn(person, user.email)}
-                      onOutToday={() => toggleOutToday(person)}
+                      onCheckIn={async () => {
+                        const result = await toggleCheckIn(person, user.email)
+                        if (result.success) {
+                          toast.success(`${person.full_name} ${person.checked_in ? 'checked out' : 'checked in'} successfully`)
+                        } else {
+                          toast.error(`Failed to ${person.checked_in ? 'check out' : 'check in'} ${person.full_name}`)
+                        }
+                      }}
+                      onOutToday={async () => {
+                        const result = await toggleOutToday(person)
+                        if (result.success) {
+                          toast.success(`${person.full_name} marked as ${person.out_today ? 'present' : 'out today'}`)
+                        } else {
+                          toast.error(`Failed to update status for ${person.full_name}`)
+                        }
+                      }}
                     />
                   ))}
                 </AnimatePresence>

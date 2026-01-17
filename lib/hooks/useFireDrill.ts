@@ -133,7 +133,7 @@ export function useFireDrill() {
   }, [supabase])
 
   // Toggle check-in status
-  const toggleCheckIn = async (person: Person, userEmail: string) => {
+  const toggleCheckIn = async (person: Person, userEmail: string): Promise<{ success: boolean; error?: any }> => {
     const newCheckedIn = !person.checked_in
     
     // Optimistic update
@@ -161,11 +161,14 @@ export function useFireDrill() {
       console.error('Error toggling check-in:', error)
       // Revert on error
       fetchPeople()
+      return { success: false, error }
     }
+    
+    return { success: true }
   }
 
   // Toggle out today status
-  const toggleOutToday = async (person: Person) => {
+  const toggleOutToday = async (person: Person): Promise<{ success: boolean; error?: any }> => {
     const newOutToday = !person.out_today
     
     // Optimistic update
@@ -190,7 +193,10 @@ export function useFireDrill() {
     if (error) {
       console.error('Error toggling out today:', error)
       fetchPeople()
+      return { success: false, error }
     }
+    
+    return { success: true }
   }
 
   // Reset all check-ins (admin only)
