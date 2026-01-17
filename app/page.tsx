@@ -164,7 +164,7 @@ export default function FireDrillPage() {
                 placeholder="Search by name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                className="w-full px-3 py-2 rounded-lg border border-white/20 bg-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-white/5 disabled:text-white/50 disabled:cursor-not-allowed"
               />
             </div>
 
@@ -244,7 +244,7 @@ export default function FireDrillPage() {
           placeholder="Search by name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+          className="w-full px-3 py-2 rounded-lg border border-white/20 bg-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-white/5 disabled:text-white/50 disabled:cursor-not-allowed"
         />
       </div>
 
@@ -372,7 +372,7 @@ export default function FireDrillPage() {
                   <select
                     value={selectedClass}
                     onChange={(e) => setSelectedClass(e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-white/20 bg-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-white/5 disabled:text-white/50 disabled:cursor-not-allowed"
                   >
                     <option value="all">All Classes</option>
                     {classes.filter(c => c !== 'Staff').map(cls => (
@@ -415,7 +415,7 @@ export default function FireDrillPage() {
                   <select
                     value={selectedClass}
                     onChange={(e) => setSelectedClass(e.target.value)}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-white text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-white/20 bg-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-white/5 disabled:text-white/50 disabled:cursor-not-allowed"
                   >
                     <option value="all">All Classes</option>
                     {classes.filter(c => c !== 'Staff').map(cls => (
