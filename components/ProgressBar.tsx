@@ -12,10 +12,10 @@ export function ProgressBar({ stats }: ProgressBarProps) {
   const totalAccountedFor = stats.staffCheckedIn + stats.staffOut + stats.studentsCheckedIn + stats.studentsOut
   
   return (
-    <div className="bg-gray-900/80 backdrop-blur-lg border-t border-white/10 p-3 md:p-4">
+    <div className="bg-white border-t border-slate-200 p-3 md:p-4">
       <div className="max-w-4xl mx-auto">
         {/* Progress Bar */}
-        <div className="relative h-6 bg-white/10 rounded-full overflow-hidden mb-2">
+        <div className="relative h-6 bg-slate-200 rounded-full overflow-hidden mb-2">
           {/* Checked In (Green) */}
           <motion.div
             className="absolute inset-y-0 left-0 bg-green-500"
@@ -37,7 +37,7 @@ export function ProgressBar({ stats }: ProgressBarProps) {
           />
           {/* Percentage Text */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-white font-bold text-sm drop-shadow-lg">
+            <span className="text-slate-900 font-bold text-sm">
               {stats.overallPercent}% Accounted For
             </span>
           </div>
@@ -46,14 +46,14 @@ export function ProgressBar({ stats }: ProgressBarProps) {
         {/* Stats Row */}
         <div className="flex justify-between text-xs md:text-sm">
           <div className="flex items-center gap-4">
-            <span className="text-green-400">
+            <span className="text-green-600">
               ✓ {stats.staffCheckedIn + stats.studentsCheckedIn} checked in
             </span>
-            <span className="text-red-400">
+            <span className="text-red-600">
               ✗ {stats.staffOut + stats.studentsOut} out
             </span>
           </div>
-          <div className="text-white/60">
+          <div className="text-slate-600">
             {totalAccountedFor} / {totalPeople} total
           </div>
         </div>

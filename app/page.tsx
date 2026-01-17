@@ -303,13 +303,13 @@ export default function FireDrillPage() {
       {/* Main Content */}
       <main className="flex-1 overflow-hidden">
         {loading ? (
-          <div className="h-full flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+          <div className="h-full flex items-center justify-center bg-slate-50">
+            <div className="w-12 h-12 border-4 border-slate-200 border-t-shefa-blue-500 rounded-full animate-spin" />
           </div>
         ) : error ? (
-          <div className="h-full flex items-center justify-center">
+          <div className="h-full flex items-center justify-center bg-slate-50">
             <div className="text-center">
-              <p className="text-sm text-red-400 mb-4">{error}</p>
+              <p className="text-sm text-red-600 mb-4">{error}</p>
               <Button variant="secondary" onClick={refresh}>
                 Try Again
               </Button>
@@ -318,26 +318,26 @@ export default function FireDrillPage() {
         ) : (
           <>
             {/* Desktop: Dual Panel */}
-            <div className="hidden md:flex h-full">
+            <div className="hidden md:flex h-full bg-slate-50">
               {/* Staff Panel */}
-              <div className="w-1/2 border-r border-white/10 flex flex-col">
-                <div className="p-4 border-b border-white/10 bg-white/5">
+              <div className="w-1/2 border-r border-slate-200 flex flex-col bg-white">
+                <div className="p-4 border-b border-slate-200 bg-white">
                   <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-2xl font-bold text-white">
+                    <h2 className="text-2xl font-bold text-slate-900">
                       Staff
-                      <span className="ml-2 text-sm text-white/50">
+                      <span className="ml-2 text-sm text-slate-600">
                         ({stats.staffCheckedIn + stats.staffOut}/{stats.totalStaff})
                       </span>
                     </h2>
                     <div className="flex gap-2">
-                      <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full font-medium">
+                      <span className="text-xs px-2 py-0.5 bg-green-50 text-green-700 rounded-full font-medium border border-green-200">
                         ✓ {stats.staffCheckedIn}
                       </span>
-                      <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 rounded-full font-medium">
+                      <span className="text-xs px-2 py-0.5 bg-red-50 text-red-700 rounded-full font-medium border border-red-200">
                         ✗ {stats.staffOut}
                       </span>
                       {stats.staffVcAbsent > 0 && (
-                        <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded-full font-medium flex items-center gap-1">
+                        <span className="text-xs px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full font-medium border border-amber-200 flex items-center gap-1">
                           <ExclamationTriangleIcon className="w-3 h-3" />
                           {stats.staffVcAbsent}
                         </span>
@@ -347,7 +347,7 @@ export default function FireDrillPage() {
                   {/* Placeholder to match Students header height */}
                   <div className="h-[38px]"></div>
                 </div>
-                <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-slate-50">
                   <AnimatePresence mode="popLayout">
                     {staffPeople
                       .filter(p => {
@@ -369,24 +369,24 @@ export default function FireDrillPage() {
               </div>
 
               {/* Students Panel */}
-              <div className="w-1/2 flex flex-col">
-                <div className="p-4 border-b border-white/10 bg-white/5">
+              <div className="w-1/2 flex flex-col bg-white">
+                <div className="p-4 border-b border-slate-200 bg-white">
                   <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-2xl font-bold text-white">
+                    <h2 className="text-2xl font-bold text-slate-900">
                       Students
-                      <span className="ml-2 text-sm text-white/50">
+                      <span className="ml-2 text-sm text-slate-600">
                         ({stats.studentsCheckedIn + stats.studentsOut}/{stats.totalStudents})
                       </span>
                     </h2>
                     <div className="flex gap-2">
-                      <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full font-medium">
+                      <span className="text-xs px-2 py-0.5 bg-green-50 text-green-700 rounded-full font-medium border border-green-200">
                         ✓ {stats.studentsCheckedIn}
                       </span>
-                      <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 rounded-full font-medium">
+                      <span className="text-xs px-2 py-0.5 bg-red-50 text-red-700 rounded-full font-medium border border-red-200">
                         ✗ {stats.studentsOut}
                       </span>
                       {stats.studentsVcAbsent > 0 && (
-                        <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded-full font-medium flex items-center gap-1">
+                        <span className="text-xs px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full font-medium border border-amber-200 flex items-center gap-1">
                           <ExclamationTriangleIcon className="w-3 h-3" />
                           {stats.studentsVcAbsent}
                         </span>
@@ -396,7 +396,7 @@ export default function FireDrillPage() {
                   <select
                     value={selectedClass}
                     onChange={(e) => setSelectedClass(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-white/20 bg-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-white/5 disabled:text-white/50 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed"
                   >
                     <option value="all">All Classes</option>
                     {classes.filter(c => c !== 'Staff').map(cls => (
@@ -404,7 +404,7 @@ export default function FireDrillPage() {
                     ))}
                   </select>
                 </div>
-                <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-slate-50">
                   <AnimatePresence mode="popLayout">
                     {studentPeople
                       .filter(p => {
@@ -432,14 +432,14 @@ export default function FireDrillPage() {
             </div>
 
             {/* Mobile: Single List */}
-            <div className="md:hidden flex-1 overflow-y-auto">
+            <div className="md:hidden flex-1 overflow-y-auto bg-slate-50">
               {/* Class Filter for Students */}
               {activeTab === 'students' && (
-                <div className="p-3 bg-gray-900/50">
+                <div className="p-3 bg-white border-b border-slate-200">
                   <select
                     value={selectedClass}
                     onChange={(e) => setSelectedClass(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-white/20 bg-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-white/5 disabled:text-white/50 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed"
                   >
                     <option value="all">All Classes</option>
                     {classes.filter(c => c !== 'Staff').map(cls => (
@@ -461,7 +461,7 @@ export default function FireDrillPage() {
                   ))}
                 </AnimatePresence>
                 {filteredPeople.length === 0 && (
-                  <div className="text-center py-8 text-sm text-white/50">
+                  <div className="text-center py-8 text-sm text-slate-500">
                     No results found
                   </div>
                 )}
@@ -500,15 +500,15 @@ export default function FireDrillPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-gray-800 rounded-xl p-6 max-w-sm w-full border border-white/20 shadow-sm"
+              className="bg-white rounded-xl p-6 max-w-sm w-full border border-slate-200 shadow-lg"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="text-center">
                 <div className="flex justify-center mb-4">
                   <ExclamationTriangleIcon className="w-16 h-16 text-amber-500" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Reset All Check-Ins?</h3>
-                <p className="text-sm text-white/60 mb-6">
+                <h3 className="text-2xl font-bold text-slate-900 mb-2">Reset All Check-Ins?</h3>
+                <p className="text-sm text-slate-600 mb-6">
                   This will clear all check-in and out-today statuses. This action cannot be undone.
                 </p>
                 <div className="flex gap-3">
