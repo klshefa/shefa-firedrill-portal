@@ -26,7 +26,7 @@ export function LoginScreen({
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
           {/* Header */}
           <div className="bg-[#164a7a] px-8 py-6 text-center">
             {/* Icon: Emoji (Sharks) or Heroicon (all others) */}
@@ -48,7 +48,7 @@ export function LoginScreen({
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
-                className="bg-red-50 border border-red-200 rounded-lg p-3 mb-6"
+                className="bg-red-50 border border-red-200 rounded-xl p-3 mb-6"
               >
                 <p className="text-red-700 text-sm text-center">{error}</p>
               </motion.div>

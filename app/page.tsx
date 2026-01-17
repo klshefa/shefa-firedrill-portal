@@ -476,7 +476,7 @@ export default function FireDrillPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-gray-800 rounded-2xl p-6 max-w-sm w-full border border-white/20"
+              className="bg-gray-800 rounded-xl p-6 max-w-sm w-full border border-white/20 shadow-sm"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="text-center">
