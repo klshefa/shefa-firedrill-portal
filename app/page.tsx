@@ -145,55 +145,57 @@ export default function FireDrillPage() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-gray-900/80 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-4">
-            {/* Logo & Title */}
+            {/* Left: Logo + Title */}
             <div className="flex items-center gap-3">
-              <span className="text-3xl">🔥</span>
+              <div className="w-10 h-10 bg-gradient-to-br from-shefa-blue-500 to-shefa-blue-800 rounded-xl flex items-center justify-center shadow-sm">
+                <BellAlertIcon className="w-6 h-6 text-white" />
+              </div>
               <div>
-                <h1 className="text-lg font-bold text-white">Fire Drill</h1>
-                <p className="text-xs text-white/50 hidden sm:block">Emergency Check-In</p>
+                <h1 className="text-lg font-bold text-slate-900">Fire Drill</h1>
+                <p className="text-xs text-slate-500 hidden sm:block">Emergency Check-In</p>
               </div>
             </div>
 
-            {/* Search - Hidden on mobile, shown in panel */}
-            <div className="hidden md:flex flex-1 max-w-md">
+            {/* Center: Search - Expanded on larger screens */}
+            <div className="flex-1 max-w-md mx-4 hidden md:block">
               <input
                 type="text"
                 placeholder="Search by name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-white/20 bg-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-white/5 disabled:text-white/50 disabled:cursor-not-allowed"
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed"
               />
             </div>
 
-            {/* User & Actions */}
+            {/* Right: User Info + Actions */}
             <div className="flex items-center gap-2">
               {isAdmin && (
                 <Button
                   variant="danger"
                   size="sm"
                   onClick={() => setShowResetConfirm(true)}
-                  className="hidden sm:block bg-red-500/20 text-red-400 hover:bg-red-500/30 border-0"
+                  className="hidden sm:block"
                 >
                   Reset All
                 </Button>
               )}
               <button
                 onClick={refresh}
-                className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-gray-900/80"
+                className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
                 title="Refresh"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </button>
-              <div className="flex items-center gap-2 pl-2 border-l border-white/10">
-                <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  {user.email.charAt(0).toUpperCase()}
+              <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+                <div className="text-right hidden sm:block">
+                  <p className="text-sm font-medium text-slate-700">{user.email}</p>
                 </div>
-                <LogoutButton onSignOut={signOut} className="text-white/70 hover:text-white hover:bg-white/10" />
+                <LogoutButton onSignOut={signOut} />
               </div>
             </div>
           </div>
@@ -201,16 +203,16 @@ export default function FireDrillPage() {
       </header>
 
       {/* Overall Progress Bar */}
-      <div className="bg-gray-900/80 border-b border-white/10 px-4 py-3">
+      <div className="bg-slate-50 border-b border-slate-200 px-4 py-3">
         <div className="max-w-screen-xl mx-auto">
           {/* Progress Bar */}
-          <div className="relative h-8 bg-white/10 rounded-full overflow-hidden mb-2">
+          <div className="relative h-8 bg-slate-200 rounded-full overflow-hidden mb-2">
             <div 
               className="absolute inset-y-0 left-0 bg-gradient-to-r from-green-500 to-emerald-500 transition-all duration-500"
               style={{ width: `${stats.overallPercent}%` }}
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-white font-bold text-sm drop-shadow-lg">
+              <span className="text-slate-900 font-bold text-sm">
                 {stats.overallPercent}% Accounted For
               </span>
             </div>
@@ -218,19 +220,19 @@ export default function FireDrillPage() {
           {/* Stats Row */}
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-4">
-              <span className="text-green-400">
+              <span className="text-green-600">
                 ✓ {stats.staffCheckedIn + stats.studentsCheckedIn} checked in
               </span>
-              <span className="text-red-400">
+              <span className="text-red-600">
                 ✗ {stats.staffOut + stats.studentsOut} out
               </span>
               {(stats.staffVcAbsent + stats.studentsVcAbsent) > 0 && (
-                <span className="text-yellow-400">
+                <span className="text-amber-600">
                   ⚠ {stats.staffVcAbsent + stats.studentsVcAbsent} VC absent
                 </span>
               )}
             </div>
-            <span className="text-white/60">
+            <span className="text-slate-600">
               {stats.staffCheckedIn + stats.studentsCheckedIn + stats.staffOut + stats.studentsOut} / {stats.totalStaff + stats.totalStudents} total
             </span>
           </div>
@@ -238,41 +240,41 @@ export default function FireDrillPage() {
       </div>
 
       {/* Mobile Search */}
-      <div className="md:hidden px-4 py-2 bg-gray-900/50">
+      <div className="md:hidden px-4 pb-3 bg-white border-b border-slate-200">
         <input
           type="text"
           placeholder="Search by name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg border border-white/20 bg-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-white/5 disabled:text-white/50 disabled:cursor-not-allowed"
+          className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:border-transparent transition-all disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed"
         />
       </div>
 
       {/* Mobile Tabs */}
-      <div className="md:hidden flex border-b border-white/10 bg-gray-900/50">
+      <div className="md:hidden flex border-b border-slate-200 bg-white">
         <button
           onClick={() => setActiveTab('staff')}
-          className={`flex-1 py-3 text-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-900/50 ${
+          className={`flex-1 py-3 text-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:ring-offset-2 ${
             activeTab === 'staff'
-              ? 'text-white border-b-2 border-orange-500 bg-white/5'
-              : 'text-white/50 hover:text-white/70'
+              ? 'text-slate-900 border-b-2 border-shefa-blue-500 bg-slate-50'
+              : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           Staff
-          <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-white/10">
+          <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
             {stats.staffCheckedIn + stats.staffOut}/{stats.totalStaff}
           </span>
         </button>
         <button
           onClick={() => setActiveTab('students')}
-          className={`flex-1 py-3 text-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-900/50 ${
+          className={`flex-1 py-3 text-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-shefa-blue-500 focus:ring-offset-2 ${
             activeTab === 'students'
-              ? 'text-white border-b-2 border-orange-500 bg-white/5'
-              : 'text-white/50 hover:text-white/70'
+              ? 'text-slate-900 border-b-2 border-shefa-blue-500 bg-slate-50'
+              : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           Students
-          <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-white/10">
+          <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
             {stats.studentsCheckedIn + stats.studentsOut}/{stats.totalStudents}
           </span>
         </button>
