@@ -10,6 +10,7 @@ import { ProgressBar } from '@/components/ProgressBar'
 import { LoginScreen } from '@/components/LoginScreen'
 import { BellAlertIcon } from '@heroicons/react/24/outline'
 import { LogoutButton } from '@/components/ui/LogoutButton'
+import { Button } from '@/components/ui/Button'
 
 type Tab = 'staff' | 'students'
 
@@ -170,12 +171,14 @@ export default function FireDrillPage() {
             {/* User & Actions */}
             <div className="flex items-center gap-2">
               {isAdmin && (
-                <button
+                <Button
+                  variant="danger"
+                  size="sm"
                   onClick={() => setShowResetConfirm(true)}
-                  className="px-3 py-2 bg-red-500/20 text-red-400 rounded-xl text-sm font-medium hover:bg-red-500/30 transition-colors hidden sm:block"
+                  className="hidden sm:block bg-red-500/20 text-red-400 hover:bg-red-500/30 border-0"
                 >
                   Reset All
-                </button>
+                </Button>
               )}
               <button
                 onClick={refresh}
@@ -285,9 +288,9 @@ export default function FireDrillPage() {
           <div className="h-full flex items-center justify-center">
             <div className="text-center">
               <p className="text-red-400 mb-4">{error}</p>
-              <button onClick={refresh} className="px-4 py-2 bg-white/10 rounded-xl text-white">
+              <Button variant="secondary" onClick={refresh}>
                 Try Again
-              </button>
+              </Button>
             </div>
           </div>
         ) : (
@@ -451,7 +454,7 @@ export default function FireDrillPage() {
       {isAdmin && (
         <button
           onClick={() => setShowResetConfirm(true)}
-          className="md:hidden fixed bottom-24 right-4 w-14 h-14 bg-red-500 rounded-full shadow-lg flex items-center justify-center text-white z-40"
+          className="md:hidden fixed bottom-24 right-4 w-14 h-14 bg-red-500 rounded-full shadow-lg flex items-center justify-center text-white z-40 hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -483,19 +486,23 @@ export default function FireDrillPage() {
                   This will clear all check-in and out-today statuses. This action cannot be undone.
                 </p>
                 <div className="flex gap-3">
-                  <button
+                  <Button
+                    variant="secondary"
+                    size="lg"
                     onClick={() => setShowResetConfirm(false)}
-                    className="flex-1 py-3 px-4 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20"
+                    className="flex-1"
                   >
                     Cancel
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="lg"
                     onClick={handleReset}
                     disabled={resetting}
-                    className="flex-1 py-3 px-4 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 disabled:opacity-50"
+                    className="flex-1"
                   >
                     {resetting ? 'Resetting...' : 'Reset All'}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </motion.div>
