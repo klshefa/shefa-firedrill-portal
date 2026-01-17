@@ -262,7 +262,7 @@ export default function FireDrillPage() {
           }`}
         >
           Staff
-          <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
+          <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">
             {stats.staffCheckedIn + stats.staffOut}/{stats.totalStaff}
           </span>
         </button>
@@ -275,7 +275,7 @@ export default function FireDrillPage() {
           }`}
         >
           Students
-          <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
+          <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">
             {stats.studentsCheckedIn + stats.studentsOut}/{stats.totalStudents}
           </span>
         </button>
@@ -311,14 +311,14 @@ export default function FireDrillPage() {
                       </span>
                     </h2>
                     <div className="flex gap-2">
-                      <span className="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded-full">
+                      <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full font-medium">
                         ✓ {stats.staffCheckedIn}
                       </span>
-                      <span className="text-xs px-2 py-1 bg-red-500/20 text-red-400 rounded-full">
+                      <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 rounded-full font-medium">
                         ✗ {stats.staffOut}
                       </span>
                       {stats.staffVcAbsent > 0 && (
-                        <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full flex items-center gap-1">
+                        <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded-full font-medium flex items-center gap-1">
                           <ExclamationTriangleIcon className="w-3 h-3" />
                           {stats.staffVcAbsent}
                         </span>
@@ -360,14 +360,14 @@ export default function FireDrillPage() {
                       </span>
                     </h2>
                     <div className="flex gap-2">
-                      <span className="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded-full">
+                      <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded-full font-medium">
                         ✓ {stats.studentsCheckedIn}
                       </span>
-                      <span className="text-xs px-2 py-1 bg-red-500/20 text-red-400 rounded-full">
+                      <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 rounded-full font-medium">
                         ✗ {stats.studentsOut}
                       </span>
                       {stats.studentsVcAbsent > 0 && (
-                        <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full flex items-center gap-1">
+                        <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded-full font-medium flex items-center gap-1">
                           <ExclamationTriangleIcon className="w-3 h-3" />
                           {stats.studentsVcAbsent}
                         </span>
