@@ -9,6 +9,7 @@ import { PersonCard } from '@/components/PersonCard'
 import { ProgressBar } from '@/components/ProgressBar'
 import { LoginScreen } from '@/components/LoginScreen'
 import { BellAlertIcon } from '@heroicons/react/24/outline'
+import { LogoutButton } from '@/components/ui/LogoutButton'
 
 type Tab = 'staff' | 'students'
 
@@ -189,12 +190,7 @@ export default function FireDrillPage() {
                 <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                   {user.email.charAt(0).toUpperCase()}
                 </div>
-                <button
-                  onClick={signOut}
-                  className="text-white/60 hover:text-white text-sm hidden sm:block"
-                >
-                  Sign Out
-                </button>
+                <LogoutButton onSignOut={signOut} />
               </div>
             </div>
           </div>
