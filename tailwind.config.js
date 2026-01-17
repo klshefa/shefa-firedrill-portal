@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+const designSystemPreset = require('./tailwind.preset.js')
+
 module.exports = {
+  presets: [designSystemPreset],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
