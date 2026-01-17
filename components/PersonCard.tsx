@@ -60,7 +60,7 @@ export function PersonCard({ person, onCheckIn, onOutToday }: PersonCardProps) {
           {/* Name and Class */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <p className="font-medium text-white truncate">
+              <p className="text-sm font-medium text-white truncate">
                 {person.last_name}, {person.first_name}
               </p>
               {person.vc_absent && !person.checked_in && !person.out_today && (

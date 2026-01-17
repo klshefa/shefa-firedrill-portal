@@ -290,7 +290,7 @@ export default function FireDrillPage() {
         ) : error ? (
           <div className="h-full flex items-center justify-center">
             <div className="text-center">
-              <p className="text-red-400 mb-4">{error}</p>
+              <p className="text-sm text-red-400 mb-4">{error}</p>
               <Button variant="secondary" onClick={refresh}>
                 Try Again
               </Button>
@@ -304,7 +304,7 @@ export default function FireDrillPage() {
               <div className="w-1/2 border-r border-white/10 flex flex-col">
                 <div className="p-4 border-b border-white/10 bg-white/5">
                   <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-lg font-semibold text-white">
+                    <h2 className="text-2xl font-bold text-white">
                       Staff
                       <span className="ml-2 text-sm text-white/50">
                         ({stats.staffCheckedIn + stats.staffOut}/{stats.totalStaff})
@@ -353,7 +353,7 @@ export default function FireDrillPage() {
               <div className="w-1/2 flex flex-col">
                 <div className="p-4 border-b border-white/10 bg-white/5">
                   <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-lg font-semibold text-white">
+                    <h2 className="text-2xl font-bold text-white">
                       Students
                       <span className="ml-2 text-sm text-white/50">
                         ({stats.studentsCheckedIn + stats.studentsOut}/{stats.totalStudents})
@@ -442,7 +442,7 @@ export default function FireDrillPage() {
                   ))}
                 </AnimatePresence>
                 {filteredPeople.length === 0 && (
-                  <div className="text-center py-8 text-white/50">
+                  <div className="text-center py-8 text-sm text-white/50">
                     No results found
                   </div>
                 )}
@@ -488,8 +488,8 @@ export default function FireDrillPage() {
                 <div className="flex justify-center mb-4">
                   <ExclamationTriangleIcon className="w-16 h-16 text-amber-500" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Reset All Check-Ins?</h3>
-                <p className="text-white/60 mb-6">
+                <h3 className="text-2xl font-bold text-white mb-2">Reset All Check-Ins?</h3>
+                <p className="text-sm text-white/60 mb-6">
                   This will clear all check-in and out-today statuses. This action cannot be undone.
                 </p>
                 <div className="flex gap-3">
