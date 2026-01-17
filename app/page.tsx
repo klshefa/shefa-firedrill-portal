@@ -8,7 +8,7 @@ import { useAdmin } from '@/lib/hooks/useAdmin'
 import { PersonCard } from '@/components/PersonCard'
 import { ProgressBar } from '@/components/ProgressBar'
 import { LoginScreen } from '@/components/LoginScreen'
-import { BellAlertIcon } from '@heroicons/react/24/outline'
+import { BellAlertIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { LogoutButton } from '@/components/ui/LogoutButton'
 import { Button } from '@/components/ui/Button'
 
@@ -227,8 +227,9 @@ export default function FireDrillPage() {
                 ✗ {stats.staffOut + stats.studentsOut} out
               </span>
               {(stats.staffVcAbsent + stats.studentsVcAbsent) > 0 && (
-                <span className="text-amber-600">
-                  ⚠ {stats.staffVcAbsent + stats.studentsVcAbsent} VC absent
+                <span className="text-amber-600 flex items-center gap-1">
+                  <ExclamationTriangleIcon className="w-4 h-4" />
+                  {stats.staffVcAbsent + stats.studentsVcAbsent} VC absent
                 </span>
               )}
             </div>
@@ -317,8 +318,9 @@ export default function FireDrillPage() {
                         ✗ {stats.staffOut}
                       </span>
                       {stats.staffVcAbsent > 0 && (
-                        <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full">
-                          ⚠ {stats.staffVcAbsent}
+                        <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full flex items-center gap-1">
+                          <ExclamationTriangleIcon className="w-3 h-3" />
+                          {stats.staffVcAbsent}
                         </span>
                       )}
                     </div>
@@ -365,8 +367,9 @@ export default function FireDrillPage() {
                         ✗ {stats.studentsOut}
                       </span>
                       {stats.studentsVcAbsent > 0 && (
-                        <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full">
-                          ⚠ {stats.studentsVcAbsent}
+                        <span className="text-xs px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded-full flex items-center gap-1">
+                          <ExclamationTriangleIcon className="w-3 h-3" />
+                          {stats.studentsVcAbsent}
                         </span>
                       )}
                     </div>
@@ -482,7 +485,9 @@ export default function FireDrillPage() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="text-center">
-                <div className="text-5xl mb-4">⚠️</div>
+                <div className="flex justify-center mb-4">
+                  <ExclamationTriangleIcon className="w-16 h-16 text-amber-500" />
+                </div>
                 <h3 className="text-xl font-bold text-white mb-2">Reset All Check-Ins?</h3>
                 <p className="text-white/60 mb-6">
                   This will clear all check-in and out-today statuses. This action cannot be undone.

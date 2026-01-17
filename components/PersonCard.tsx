@@ -27,7 +27,7 @@ export function PersonCard({ person, onCheckIn, onOutToday }: PersonCardProps) {
   const getStatusIcon = () => {
     if (person.out_today) return '✗'
     if (person.checked_in) return '✓'
-    if (person.vc_absent) return '⚠'
+    if (person.vc_absent) return '⚠' // Keep as character for status display
     return '○'
   }
 
