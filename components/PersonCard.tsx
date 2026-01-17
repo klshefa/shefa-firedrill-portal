@@ -84,8 +84,9 @@ export function PersonCard({ person, onCheckIn, onOutToday }: PersonCardProps) {
           }}
           className={`
             px-2 py-1 rounded-lg text-xs font-medium transition-all
+            focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-transparent
             ${person.out_today 
-              ? 'bg-red-500 text-white' 
+              ? 'bg-red-500 text-white hover:bg-red-600' 
               : 'bg-white/10 text-white/50 hover:bg-red-500/20 hover:text-red-300'
             }
           `}

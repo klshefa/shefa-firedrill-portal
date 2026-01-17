@@ -182,7 +182,7 @@ export default function FireDrillPage() {
               )}
               <button
                 onClick={refresh}
-                className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-colors"
+                className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-gray-900/80"
                 title="Refresh"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -252,10 +252,10 @@ export default function FireDrillPage() {
       <div className="md:hidden flex border-b border-white/10 bg-gray-900/50">
         <button
           onClick={() => setActiveTab('staff')}
-          className={`flex-1 py-3 text-center font-medium transition-colors ${
+          className={`flex-1 py-3 text-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-900/50 ${
             activeTab === 'staff'
               ? 'text-white border-b-2 border-orange-500 bg-white/5'
-              : 'text-white/50'
+              : 'text-white/50 hover:text-white/70'
           }`}
         >
           Staff
@@ -265,10 +265,10 @@ export default function FireDrillPage() {
         </button>
         <button
           onClick={() => setActiveTab('students')}
-          className={`flex-1 py-3 text-center font-medium transition-colors ${
+          className={`flex-1 py-3 text-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-900/50 ${
             activeTab === 'students'
               ? 'text-white border-b-2 border-orange-500 bg-white/5'
-              : 'text-white/50'
+              : 'text-white/50 hover:text-white/70'
           }`}
         >
           Students
