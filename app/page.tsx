@@ -8,7 +8,7 @@ import { useAdmin } from '@/lib/hooks/useAdmin'
 import { PersonCard } from '@/components/PersonCard'
 import { ProgressBar } from '@/components/ProgressBar'
 import { LoginScreen } from '@/components/LoginScreen'
-import { BellAlertIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { BellAlertIcon, ExclamationTriangleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { LogoutButton } from '@/components/ui/LogoutButton'
 import { Button } from '@/components/ui/Button'
 
@@ -461,8 +461,10 @@ export default function FireDrillPage() {
                   ))}
                 </AnimatePresence>
                 {filteredPeople.length === 0 && (
-                  <div className="text-center py-8 text-sm text-slate-500">
-                    No results found
+                  <div className="text-center py-12">
+                    <MagnifyingGlassIcon className="w-12 h-12 mx-auto mb-3 text-slate-400" />
+                    <p className="text-sm font-medium text-slate-700 mb-1">No results found</p>
+                    <p className="text-xs text-slate-500">Try adjusting your search query</p>
                   </div>
                 )}
               </div>
