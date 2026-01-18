@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
+import { ErrorMessage } from './ui/ErrorMessage'
 
 interface LoginScreenProps {
   icon?: string  // Emoji (for Sharks only)
@@ -48,9 +49,9 @@ export function LoginScreen({
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
-                className="bg-red-50 border border-red-200 rounded-xl p-3 mb-6"
+                className="mb-6"
               >
-                <p className="text-red-700 text-sm text-center">{error}</p>
+                <ErrorMessage message={error} variant="compact" />
               </motion.div>
             )}
             

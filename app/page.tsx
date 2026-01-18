@@ -12,6 +12,7 @@ import { LoginScreen } from '@/components/LoginScreen'
 import { BellAlertIcon, ExclamationTriangleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { LogoutButton } from '@/components/ui/LogoutButton'
 import { Button } from '@/components/ui/Button'
+import { ErrorMessage } from '@/components/ui/ErrorMessage'
 
 type Tab = 'staff' | 'students'
 
@@ -314,12 +315,14 @@ export default function FireDrillPage() {
             <div className="w-12 h-12 border-4 border-slate-200 border-t-shefa-blue-500 rounded-full animate-spin" />
           </div>
         ) : error ? (
-          <div className="h-full flex items-center justify-center bg-slate-50">
-            <div className="text-center">
-              <p className="text-sm text-red-600 mb-4">{error}</p>
-              <Button variant="secondary" onClick={refresh}>
-                Try Again
-              </Button>
+          <div className="h-full flex items-center justify-center bg-slate-50 px-4">
+            <div className="text-center max-w-md">
+              <ErrorMessage message={error} variant="full" />
+              <div className="mt-4">
+                <Button variant="secondary" onClick={refresh}>
+                  Try Again
+                </Button>
+              </div>
             </div>
           </div>
         ) : (
