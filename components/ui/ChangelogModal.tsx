@@ -140,7 +140,7 @@ export function ChangelogModal({ portalName, onClose }: ChangelogModalProps) {
                       onClick={() => setSelectedCategory(null)}
                       className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
                         selectedCategory === null
-                          ? 'bg-blue-500 text-white'
+                          ? 'bg-shefa-blue-500 text-white'
                           : 'bg-white text-slate-700 hover:bg-slate-100'
                       }`}
                     >
@@ -152,7 +152,7 @@ export function ChangelogModal({ portalName, onClose }: ChangelogModalProps) {
                         onClick={() => setSelectedCategory(key)}
                         className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
                           selectedCategory === key
-                            ? 'bg-blue-500 text-white'
+                            ? 'bg-shefa-blue-500 text-white'
                             : 'bg-white text-slate-700 hover:bg-slate-100'
                         }`}
                       >
