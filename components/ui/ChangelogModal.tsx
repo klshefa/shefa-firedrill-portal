@@ -54,6 +54,7 @@ export function ChangelogModal({ portalName, onClose }: ChangelogModalProps) {
       .eq('portal_name', portalName)
       .eq('is_hidden', false)  // Only show non-hidden entries
       .order('change_date', { ascending: false })
+      .order('id', { ascending: false })  // Secondary sort by ID for consistent ordering
       .limit(50)
     
     if (selectedCategory) {
@@ -72,8 +73,11 @@ export function ChangelogModal({ portalName, onClose }: ChangelogModalProps) {
   }
 
   // Group entries by date
+  // Parse date string directly to avoid timezone issues (dates are stored as YYYY-MM-DD)
   const groupedEntries = entries.reduce((acc, entry) => {
-    const date = new Date(entry.change_date).toLocaleDateString('en-US', {
+    // Parse YYYY-MM-DD directly without timezone conversion
+    const [year, month, day] = entry.change_date.split('-').map(Number)
+    const date = new Date(year, month - 1, day).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
