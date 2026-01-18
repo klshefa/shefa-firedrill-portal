@@ -1,0 +1,192 @@
+name: Update Changelog
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  parse-changelog:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history for git log
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install @supabase/supabase-js
+      
+      - name: Determine portal name from repository
+        id: portal
+        run: |
+          REPO_NAME="${{ github.repository }}"
+          case "$REPO_NAME" in
+            *enrollment-tracker*) echo "name=enrollment" >> $GITHUB_OUTPUT ;;
+            *dismissal-app*) echo "name=dismissal" >> $GITHUB_OUTPUT ;;
+            *attendance-portal*) echo "name=attendance" >> $GITHUB_OUTPUT ;;
+            *firedrill-portal*) echo "name=firedrill" >> $GITHUB_OUTPUT ;;
+            *outplacement-tracker*) echo "name=outplacement" >> $GITHUB_OUTPUT ;;
+            *rewards-portal*) echo "name=rewards" >> $GITHUB_OUTPUT ;;
+            *sharks-portal*) echo "name=sharks" >> $GITHUB_OUTPUT ;;
+            *) echo "name=unknown" >> $GITHUB_OUTPUT ;;
+          esac
+      
+      - name: Get commits from last 7 days
+        id: commits
+        run: |
+          SINCE_DATE=$(date -d '7 days ago' +%Y-%m-%d)
+          echo "date=$SINCE_DATE" >> $GITHUB_OUTPUT
+          echo "Since date: $SINCE_DATE"
+      
+      - name: Parse commits and update changelog
+        env:
+          SUPABASE_URL: https://rkfwphowryckqkozscfi.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          PORTAL_NAME="${{ steps.portal.outputs.name }}"
+          SINCE_DATE="${{ steps.commits.outputs.date }}"
+          
+          # Create a temporary parse script for this portal
+          cat > parse-changelog.js << 'EOF'
+          const { execSync } = require('child_process');
+          const { createClient } = require('@supabase/supabase-js');
+          const path = require('path');
+          const fs = require('fs');
+          
+          const SUPABASE_URL = process.env.SUPABASE_URL;
+          const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          const PORTAL_NAME = process.env.PORTAL_NAME;
+          const SINCE_DATE = process.env.SINCE_DATE;
+          
+          // Noise patterns
+          const NOISE_PATTERNS = [
+            /fix\s+build/i, /build\s+error/i, /deploy/i, /type\s+error/i,
+            /typescript/i, /ts\s+error/i, /lint/i, /formatting/i, /prettier/i,
+            /merge/i, /rebase/i, /conflict/i, /test/i, /spec/i, /jest/i,
+            /chore/i, /refactor\s+only/i,
+          ];
+          
+          const CATEGORY_KEYWORDS = {
+            ui: ['ui', 'design', 'styling', 'theme', 'color', 'layout', 'header', 'button', 'component', 'visual', 'appearance'],
+            ux: ['ux', 'user experience', 'interaction', 'flow', 'navigation', 'accessibility', 'usability', 'toast', 'notification', 'modal', 'dialog'],
+            backend: ['api', 'database', 'migration', 'rpc', 'edge function', 'supabase', 'query', 'table', 'schema', 'sql'],
+            feature: ['add', 'new', 'feature', 'implement', 'create', 'introduce', 'support for'],
+            bug: ['fix', 'bug', 'error', 'issue', 'resolve', 'correct', 'patch', 'broken'],
+          };
+          
+          function categorizeCommit(message) {
+            const lowerMessage = message.toLowerCase();
+            for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+              for (const keyword of keywords) {
+                if (lowerMessage.includes(keyword)) return category;
+              }
+            }
+            return 'feature';
+          }
+          
+          function isNoise(message) {
+            return NOISE_PATTERNS.some(pattern => pattern.test(message.toLowerCase()));
+          }
+          
+          function parseCommitMessage(message) {
+            const lines = message.split('\n').filter(line => line.trim());
+            const title = lines[0]?.trim() || message.trim();
+            const description = lines.slice(1).join('\n').trim() || null;
+            return { title, description };
+          }
+          
+          function getCommits(since) {
+            let command = `git log --pretty=format:"%H|%ad|%s%n%b" --date=short`;
+            if (since) command += ` --since="${since}"`;
+            try {
+              return execSync(command, { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 }).trim();
+            } catch (error) {
+              console.error(`Error running git log: ${error.message}`);
+              return '';
+            }
+          }
+          
+          function parseCommits(gitOutput) {
+            if (!gitOutput) return [];
+            const commits = [];
+            const blocks = gitOutput.split(/\n(?=[a-f0-9]{40}\|)/);
+            
+            for (const block of blocks) {
+              const lines = block.split('\n');
+              if (lines.length === 0) continue;
+              const [hash, date, ...messageLines] = lines[0].split('|');
+              if (!hash || !date) continue;
+              const message = messageLines.join('|') + (lines.slice(1).join('\n') || '');
+              if (isNoise(message)) continue;
+              const { title, description } = parseCommitMessage(message);
+              const category = categorizeCommit(message);
+              commits.push({ hash: hash.trim(), date: date.trim(), title, description, category, message: message.trim() });
+            }
+            return commits;
+          }
+          
+          async function insertCommits(commits) {
+            if (!SUPABASE_SERVICE_KEY) {
+              throw new Error('SUPABASE_SERVICE_ROLE_KEY not set');
+            }
+            const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+            const hashes = commits.map(c => c.hash);
+            const { data: existing } = await supabase
+              .from('portal_changelogs')
+              .select('commit_hash')
+              .in('commit_hash', hashes);
+            const existingHashes = new Set(existing?.map(e => e.commit_hash) || []);
+            const newCommits = commits.filter(c => !existingHashes.has(c.hash));
+            if (newCommits.length === 0) {
+              console.log('No new commits to insert');
+              return;
+            }
+            const records = newCommits.map(c => ({
+              portal_name: PORTAL_NAME,
+              change_date: c.date,
+              category: c.category,
+              title: c.title,
+              description: c.description,
+              commit_hash: c.hash,
+              commit_message: c.message,
+              is_manual: false,
+            }));
+            const batchSize = 100;
+            for (let i = 0; i < records.length; i += batchSize) {
+              const batch = records.slice(i, i + batchSize);
+              const { error } = await supabase.from('portal_changelogs').insert(batch);
+              if (error) throw error;
+            }
+            console.log(`Inserted ${newCommits.length} new commits for ${PORTAL_NAME}`);
+          }
+          
+          async function main() {
+            console.log(`Parsing commits for ${PORTAL_NAME} since ${SINCE_DATE}...`);
+            const gitOutput = getCommits(SINCE_DATE);
+            const commits = parseCommits(gitOutput);
+            console.log(`Found ${commits.length} meaningful commits`);
+            if (commits.length > 0) {
+              await insertCommits(commits);
+            }
+          }
+          
+          main().catch(error => {
+            console.error('Error:', error);
+            process.exit(1);
+          });
+          EOF
+          
+          PORTAL_NAME="${{ steps.portal.outputs.name }}" SINCE_DATE="${{ steps.commits.outputs.date }}" node parse-changelog.js
+      
+      - name: Report results
+        if: always()
+        run: |
+          echo "✅ Changelog update completed for ${{ steps.portal.outputs.name }}"
