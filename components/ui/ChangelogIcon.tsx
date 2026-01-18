@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { DocumentTextIcon } from '@heroicons/react/24/outline'
+import { SparklesIcon } from '@heroicons/react/24/outline'
 import { ChangelogModal } from './ChangelogModal'
 
 interface ChangelogIconProps {
