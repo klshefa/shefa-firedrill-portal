@@ -13,6 +13,7 @@ import { BellAlertIcon, ExclamationTriangleIcon, MagnifyingGlassIcon } from '@he
 import { LogoutButton } from '@/components/ui/LogoutButton'
 import { Button } from '@/components/ui/Button'
 import { ErrorMessage } from '@/components/ui/ErrorMessage'
+import { ChangelogIcon } from '@/components/ui/ChangelogIcon'
 
 type Tab = 'staff' | 'students'
 
@@ -180,6 +181,9 @@ export default function FireDrillPage() {
 
             {/* Right: Actions */}
             <div className="flex items-center gap-2">
+              {/* Changelog button */}
+              <ChangelogIcon portalName="firedrill" />
+              
               {/* Help Button */}
               <a
                 href="/docs/firedrill-guide.html"
