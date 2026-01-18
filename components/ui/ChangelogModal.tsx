@@ -52,6 +52,7 @@ export function ChangelogModal({ portalName, onClose }: ChangelogModalProps) {
       .from('portal_changelogs')
       .select('id, change_date, category, title, description, commit_hash')
       .eq('portal_name', portalName)
+      .eq('is_hidden', false)  // Only show non-hidden entries
       .order('change_date', { ascending: false })
       .limit(50)
     
