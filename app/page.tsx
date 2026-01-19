@@ -79,6 +79,35 @@ export default function FireDrillPage() {
 
   // Sign out
   const signOut = async () => {
+    // Get current user before signing out
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    // Log logout before signing out - ensure it completes before redirect
+    if (user?.email) {
+      try {
+        const { logAuditEvent } = await import('@/lib/audit-events')
+        await logAuditEvent(supabase, {
+          event_type: 'logout',
+          event_category: 'auth',
+          portal: 'firedrill',
+          action: 'success',
+          user_id: user.id,
+          user_email: user.email,
+          user_name: user.user_metadata?.full_name || null,
+          ip_address: null, // Client-side, IP not available
+          user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+          source_url: typeof window !== 'undefined' ? window.location.href : null,
+          metadata: {
+            logout_method: 'user_initiated',
+          },
+        })
+        console.log('[Logout] Audit event logged successfully')
+      } catch (error) {
+        console.error('[Logout] Failed to log audit event:', error)
+        // Continue with logout even if audit logging fails
+      }
+    }
+    
     await supabase.auth.signOut()
     setUser(null)
   }
