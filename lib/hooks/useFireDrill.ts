@@ -3,33 +3,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { RealtimeChannel } from '@supabase/supabase-js'
+import { FireDrillPerson as Person, DrillStats } from '@shefa/types'
 
-export interface Person {
-  person_id: number
-  first_name: string
-  last_name: string
-  full_name: string
-  person_type: 'student' | 'staff'
-  class_name: string | null
-  grade_level?: number | null
-  checked_in: boolean
-  out_today: boolean
-  checked_in_at: string | null
-  checked_in_by: string | null
-  vc_absent: boolean  // From Veracross attendance - highlight yellow if true
-}
-
-export interface DrillStats {
-  totalStaff: number
-  staffCheckedIn: number
-  staffOut: number
-  staffVcAbsent: number
-  totalStudents: number
-  studentsCheckedIn: number
-  studentsOut: number
-  studentsVcAbsent: number
-  overallPercent: number
-}
+export type { Person, DrillStats }
 
 export function useFireDrill() {
   const [people, setPeople] = useState<Person[]>([])

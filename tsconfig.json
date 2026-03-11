@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@shefa/database": ["./packages/database/src/index.ts"],
+      "@shefa/database/*": ["./packages/database/src/*"],
+      "@shefa/types": ["./packages/types/src/index.ts"],
+      "@shefa/types/*": ["./packages/types/src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
